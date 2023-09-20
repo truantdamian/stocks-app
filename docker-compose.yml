@@ -1,0 +1,21 @@
+version: "3.8"
+services:
+  redis:
+    image: redis:alpine
+    expose:
+      - 6379
+  frontend:
+    container_name: "frontend"
+    depends_on:
+      - redis
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: always
+    volumes:
+      - ./:/app
+      - /app/node_modules
+      - /app/.next
+    ports:
+      - 3000:3000
+    command: yarn dev
