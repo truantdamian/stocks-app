@@ -1,12 +1,20 @@
-import { NextResponse } from "next/server";
-import { getStoredData, storeData } from "../../../library/redisClient";
+import { getPaginatedData } from "library/manageData";
+import { getStoredData, storeData } from "library/redisClient";
+import { NextRequest, NextResponse } from "next/server";
 
-export async function GET() {
+export async function GET(request: NextRequest) {
   const stockKey = "DATA_STOCK";
   const url = `${process.env.API_URL}/stocks`;
   const options = {
     method: "GET",
   };
+
+  const urlQuery = new URL(request.url);
+  const searchParams = new URLSearchParams(urlQuery.search);
+
+  const pageQuery = parseInt(searchParams.get("page"));
+
+  const page = isNaN(pageQuery) ? 1 : pageQuery;
 
   let storedData = await getStoredData(stockKey);
 
@@ -20,5 +28,7 @@ export async function GET() {
 
   const { data } = dataJson;
 
-  return NextResponse.json(data);
+  const result = getPaginatedData(data, page, 50);
+
+  return NextResponse.json(result);
 }
