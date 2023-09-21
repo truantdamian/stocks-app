@@ -7,8 +7,6 @@ export default async function Page({ searchParams }) {
 
   const data = await response.json();
 
-  console.log(data);
-
   return (
     <>
       <p>{data.name}</p>

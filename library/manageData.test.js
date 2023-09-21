@@ -52,8 +52,6 @@ describe("manage data", () => {
   test("expect if currentPage=3 and itemPerPage=10 paginatedData length be 0", () => {
     const { paginatedData } = getPaginatedData(data, 3, 10);
 
-    console.log(paginatedData);
-
     expect(paginatedData.length).toBe(0);
   });
 });
