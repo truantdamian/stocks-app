@@ -10,6 +10,28 @@ export default async function Page({ searchParams }) {
   return (
     <>
       <p>{data.name}</p>
+      <hr />
+      <div>
+        <input type="radio" value="real_time" name="timeType" />
+        Tiempo Real
+      </div>
+      <div>
+        <input type="radio" value="history" name="timeType" />
+        Histórico
+        <input type="date" name="date_start" />{" "}
+        <input type="date" name="date_finish" />
+      </div>
+      <div>
+        Intervalo
+        <select>
+          <option value="1min">1min</option>
+          <option value="5min">5min</option>
+          <option value="15min">15min</option>
+        </select>
+      </div>
+      <div>
+        <button>Ver Gráfico</button>
+      </div>
     </>
   );
 }
