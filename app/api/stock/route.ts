@@ -12,6 +12,10 @@ export async function GET(request: NextRequest) {
   const urlQuery = new URL(request.url);
   const searchParams = new URLSearchParams(urlQuery.search);
 
+  const symbol = searchParams.get("symbol");
+
+  const name = searchParams.get("name");
+
   const pageQuery = parseInt(searchParams.get("page"));
 
   const page = isNaN(pageQuery) ? 1 : pageQuery;
@@ -28,7 +32,13 @@ export async function GET(request: NextRequest) {
 
   const { data } = dataJson;
 
-  const result = getPaginatedData(data, page, 50);
+  const filteredData = data.filter(
+    (x) =>
+      (x.symbol.startsWith(symbol) || symbol === "") &&
+      (x.name.includes(name) || name === "")
+  );
+
+  const result = getPaginatedData(filteredData, page, 50);
 
   return NextResponse.json(result);
 }

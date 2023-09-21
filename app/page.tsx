@@ -2,9 +2,11 @@ import Link from "next/link";
 import { Suspense } from "react";
 
 export default async function Page({ searchParams }) {
-  const { page } = searchParams;
+  const { page, symbol = "", name = "" } = searchParams;
 
-  const response = await fetch(`http://localhost:3000/api/stock?page=${page}`);
+  const response = await fetch(
+    `http://localhost:3000/api/stock?symbol=${symbol}&name=${name}&page=${page}`
+  );
 
   const { paginatedData, totalPages, currentPage } = await response.json();
 
@@ -15,6 +17,32 @@ export default async function Page({ searchParams }) {
 
   return (
     <>
+      <form method="GET">
+        <div>
+          <input
+            type="text"
+            placeholder="simbolo"
+            name="symbol"
+            defaultValue={symbol}
+          />
+        </div>
+        <div>
+          <input
+            type="text"
+            placeholder="nombre"
+            name="name"
+            defaultValue={name}
+          />
+        </div>
+        <div>
+          <input type="hidden" name="page" value={currentPage} />
+        </div>
+        <div>
+          <button type="submit">Buscar</button>
+        </div>
+      </form>
+
+      <hr />
       <Suspense fallback={<div>cargando...</div>}>
         <>
           {paginatedData.map((data) => (
@@ -28,8 +56,13 @@ export default async function Page({ searchParams }) {
         </>
       </Suspense>
       <div>
-        <Link href={`?page=${backPage}`}>Anterior</Link>-
-        <Link href={`?page=${nextPage}`}>Siguiente</Link>
+        <Link href={`?symbol=${symbol}&name=${name}&page=${backPage}`}>
+          Anterior
+        </Link>
+        -
+        <Link href={`?symbol=${symbol}&name=${name}&page=${nextPage}`}>
+          Siguiente
+        </Link>
         {currentPage} de {totalPages}
       </div>
     </>
