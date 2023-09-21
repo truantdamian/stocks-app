@@ -19,8 +19,10 @@ export default async function Page({ searchParams }) {
         <>
           {paginatedData.map((data) => (
             <p key={`${data.symbol}-${data.mic_code}`}>
-              {data.symbol} - {data.name} - {data.currency} - {data.type} -
-              {data.exchange}
+              <Link href={`detail?symbol=${data.symbol}&code=${data.mic_code}`}>
+                {data.symbol}
+              </Link>
+              - {data.name} - {data.currency} - {data.type} -{data.exchange}
             </p>
           ))}
         </>
