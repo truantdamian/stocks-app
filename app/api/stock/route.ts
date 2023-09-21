@@ -34,8 +34,9 @@ export async function GET(request: NextRequest) {
 
   const filteredData = data.filter(
     (x) =>
-      (x.symbol.startsWith(symbol) || symbol === "") &&
-      (x.name.includes(name) || name === "")
+      (x.symbol.toLowerCase().startsWith(symbol.toLowerCase()) ||
+        symbol === "") &&
+      (x.name.toLowerCase().includes(name.toLowerCase()) || name === "")
   );
 
   const result = getPaginatedData(filteredData, page, 50);
