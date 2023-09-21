@@ -13,7 +13,7 @@ export const getStoredData = async (key: string) => {
 };
 
 export const storeData = async (key: string, data: any) => {
-  const client = createClient({ url: "redis://redis:6379" });
+  const client = createClient({ url: process.env.REDIS_URL });
 
   client.on("error", (err) => console.log("Redis Client Error", err));
 
