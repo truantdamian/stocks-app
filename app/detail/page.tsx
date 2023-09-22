@@ -1,3 +1,5 @@
+import { LineChart } from "components/LineChart";
+
 export default async function Page({ searchParams }) {
   const { symbol, code } = searchParams;
 
@@ -12,7 +14,7 @@ export default async function Page({ searchParams }) {
       <p>{data.name}</p>
       <hr />
       <div>
-        <input type="radio" value="real_time" name="timeType" />
+        <input type="radio" value="real_time" name="timeType" checked />
         Tiempo Real
       </div>
       <div>
@@ -24,13 +26,18 @@ export default async function Page({ searchParams }) {
       <div>
         Intervalo
         <select>
-          <option value="1min">1min</option>
+          <option value="1min" selected>
+            1min
+          </option>
           <option value="5min">5min</option>
           <option value="15min">15min</option>
         </select>
       </div>
       <div>
         <button>Ver Gráfico</button>
+      </div>
+      <div>
+        <LineChart symbol="NFLX" interval={"1min"} />
       </div>
     </>
   );
