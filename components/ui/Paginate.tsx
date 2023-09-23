@@ -29,7 +29,13 @@ export const Paginate = ({
         <span>Anterior</span>
       </a>
       <div className="items-center hidden md:flex gap-x-3">
-        {currentPage} de {totalPages}
+        {totalPages === 0 ? (
+          <>-</>
+        ) : (
+          <>
+            {currentPage} de {totalPages}
+          </>
+        )}
       </div>
 
       <a
