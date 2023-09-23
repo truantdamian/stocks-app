@@ -1,3 +1,6 @@
+import { SearchForm } from "components/SearchForm";
+import { StockList } from "components/StockList";
+import { Paginate } from "components/ui/Paginate";
 import Link from "next/link";
 import { Suspense } from "react";
 
@@ -8,62 +11,27 @@ export default async function Page({ searchParams }) {
     `http://localhost:3000/api/stock?symbol=${symbol}&name=${name}&page=${page}`
   );
 
-  const { paginatedData, totalPages, currentPage } = await response.json();
-
-  const nextPage =
-    currentPage + 1 <= totalPages ? currentPage + 1 : currentPage;
-
-  const backPage = currentPage - 1 <= 0 ? currentPage : currentPage - 1;
+  const { paginatedData, backPage, nextPage, currentPage, totalPages } =
+    await response.json();
 
   return (
     <>
-      <form method="GET">
-        <div>
-          <input
-            type="text"
-            placeholder="simbolo"
-            name="symbol"
-            defaultValue={symbol}
+      <div className="flex flex-col gap-4">
+        <div className="container px-4 mx-auto">
+          <div>
+            <SearchForm name={name} symbol={symbol} />
+          </div>
+          <Suspense fallback={<div>cargando...</div>}>
+            <StockList data={paginatedData} />
+          </Suspense>
+          <Paginate
+            currentPage={currentPage}
+            totalPages={totalPages}
+            backPage={backPage}
+            nextPage={nextPage}
+            url={`?symbol=${symbol}&name=${name}&page=`}
           />
         </div>
-        <div>
-          <input
-            type="text"
-            placeholder="nombre"
-            name="name"
-            defaultValue={name}
-          />
-        </div>
-        <div>
-          <input type="hidden" name="page" value={currentPage} />
-        </div>
-        <div>
-          <button type="submit">Buscar</button>
-        </div>
-      </form>
-
-      <hr />
-      <Suspense fallback={<div>cargando...</div>}>
-        <>
-          {paginatedData.map((data) => (
-            <p key={`${data.symbol}-${data.mic_code}`}>
-              <Link href={`detail?symbol=${data.symbol}&code=${data.mic_code}`}>
-                {data.symbol}
-              </Link>
-              - {data.name} - {data.currency} - {data.type} -{data.exchange}
-            </p>
-          ))}
-        </>
-      </Suspense>
-      <div>
-        <Link href={`?symbol=${symbol}&name=${name}&page=${backPage}`}>
-          Anterior
-        </Link>
-        -
-        <Link href={`?symbol=${symbol}&name=${name}&page=${nextPage}`}>
-          Siguiente
-        </Link>
-        {currentPage} de {totalPages}
       </div>
     </>
   );

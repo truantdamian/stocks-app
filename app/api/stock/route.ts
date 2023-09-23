@@ -39,7 +39,7 @@ export async function GET(request: NextRequest) {
       (x.name.toLowerCase().includes(name.toLowerCase()) || name === "")
   );
 
-  const result = getPaginatedData(filteredData, page, 50);
+  const result = getPaginatedData(filteredData, page, 10);
 
   return NextResponse.json(result);
 }
