@@ -7,6 +7,7 @@ import { DateField } from "./ui/DateField";
 import { DropDownField } from "./ui/DropDownField";
 import { RadioGroup } from "./ui/RadioGroup";
 import { convertToDate } from "library/DateUtil";
+import { timeSeriesEnum } from "app/constants/timeSeriesEnum";
 
 export const GraphicDashboard = ({ symbol }) => {
   const [graphicError, setGraphicError] = useState({
@@ -16,7 +17,7 @@ export const GraphicDashboard = ({ symbol }) => {
   });
 
   const [graphicParam, setGraphicParam] = useState({
-    type: "real_time",
+    type: timeSeriesEnum.REALTIME,
     symbol,
     init: false,
     interval: "",
@@ -36,17 +37,17 @@ export const GraphicDashboard = ({ symbol }) => {
 
   const config = {
     nameGroup: "time_group",
-    defaultChecked: "real_time",
+    defaultChecked: timeSeriesEnum.REALTIME,
     callbackClick: (value) => handleRadioGroup(value),
     options: [
       {
-        id: "real_time",
-        value: "real_time",
+        id: timeSeriesEnum.REALTIME,
+        value: timeSeriesEnum.REALTIME,
         label: "Tiempo Real",
       },
       {
-        id: "history",
-        value: "history",
+        id: timeSeriesEnum.HISTORY,
+        value: timeSeriesEnum.HISTORY,
         label: "Historico",
       },
     ],
@@ -87,7 +88,7 @@ export const GraphicDashboard = ({ symbol }) => {
       isOk = false;
     }
 
-    if (type === "history") {
+    if (type === timeSeriesEnum.HISTORY) {
       if (startDate === "") {
         startDateError = "Ingrese una fecha de inicio";
         isOk = false;
@@ -124,7 +125,7 @@ export const GraphicDashboard = ({ symbol }) => {
       <div className="w-full md:w-1/2 m-auto flex flex-col gap-8">
         <RadioGroup config={config} />
 
-        {graphicParam.type === "history" && (
+        {graphicParam.type === timeSeriesEnum.HISTORY && (
           <div className="flex flex-col md:flex-row gap-5">
             <DateField
               value={graphicParam.startDate}

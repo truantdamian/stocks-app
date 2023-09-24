@@ -2,6 +2,7 @@
 import { useEffect, useState } from "react";
 import * as Highcharts from "highcharts";
 import HighchartsReact from "highcharts-react-official";
+import { timeSeriesEnum } from "app/constants/timeSeriesEnum";
 
 export const LineChart = ({ graphicParam }) => {
   const { type, symbol, init, interval, startDate, endDate } = graphicParam;
@@ -29,7 +30,10 @@ export const LineChart = ({ graphicParam }) => {
     xAxis: {
       type: "datetime",
       labels: {
-        format: type === "history" ? "{value:%Y-%m-%d %H:%M}" : "{value:%H:%M}",
+        format:
+          type === timeSeriesEnum.HISTORY
+            ? "{value:%Y-%m-%d %H:%M}"
+            : "{value:%H:%M}",
       },
     },
 
@@ -91,7 +95,7 @@ export const LineChart = ({ graphicParam }) => {
   useEffect(() => {
     let timer = null;
 
-    if (init === false || type !== "real_time" || interval === "") {
+    if (init === false || type !== timeSeriesEnum.REALTIME || interval === "") {
       clearInterval(timer);
       return;
     }
