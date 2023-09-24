@@ -1,11 +1,11 @@
 import { SearchForm } from "components/SearchForm";
 import { StockList } from "components/StockList";
 import { Paginate } from "components/ui/Paginate";
-import Link from "next/link";
+
 import { Suspense } from "react";
 
 export default async function Page({ searchParams }) {
-  const { page, symbol = "", name = "" } = searchParams;
+  const { page = "", symbol = "", name = "" } = searchParams;
 
   const response = await fetch(
     `http://localhost:3000/api/stock?symbol=${symbol}&name=${name}&page=${page}`

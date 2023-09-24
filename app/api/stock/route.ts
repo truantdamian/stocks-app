@@ -39,6 +39,10 @@ export async function GET(request: NextRequest) {
       (x.name.toLowerCase().includes(name.toLowerCase()) || name === "")
   );
 
+  if (page === -1) {
+    return NextResponse.json(filteredData);
+  }
+
   const result = getPaginatedData(filteredData, page, 10);
 
   return NextResponse.json(result);
