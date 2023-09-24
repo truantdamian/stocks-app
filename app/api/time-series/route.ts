@@ -265,11 +265,13 @@ export async function GET(request: NextRequest) {
 
   const symbol = searchParams.get("symbol");
   const interval = searchParams.get("interval");
+  const start_date = searchParams.get("start_date");
+  const end_date = searchParams.get("end_date");
 
-  // const url = `${process.env.API_URL}/time_series?symbol=${symbol}&interval=${interval}&apikey=${process.env.TWELVE_API_KEY}`;
+  const url = `${process.env.API_URL}/time_series?symbol=${symbol}&interval=${interval}&start_date=${start_date}&end_date=${end_date}&apikey=${process.env.TWELVE_API_KEY}`;
 
-  // const response = await fetch(url, options);
-  // const result = await response.json();
+  const response = await fetch(url, options);
+  const result = await response.json();
 
-  return NextResponse.json(mockData);
+  return NextResponse.json(result);
 }

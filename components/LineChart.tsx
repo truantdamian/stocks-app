@@ -3,7 +3,9 @@ import { useEffect, useState } from "react";
 import * as Highcharts from "highcharts";
 import HighchartsReact from "highcharts-react-official";
 
-export const LineChart = ({ symbol, interval }) => {
+export const LineChart = ({ graphicParam }) => {
+  const { type, symbol, init, interval, startDate, endDate } = graphicParam;
+
   const [series, setSeries] = useState({
     volume: [],
   });
@@ -27,7 +29,7 @@ export const LineChart = ({ symbol, interval }) => {
     xAxis: {
       type: "datetime",
       labels: {
-        format: "{value:%H:%M}",
+        format: type === "history" ? "{value:%Y-%m-%d %H:%M}" : "{value:%H:%M}",
       },
     },
 
@@ -55,13 +57,13 @@ export const LineChart = ({ symbol, interval }) => {
   };
 
   const getTimeSeries = async () => {
-    const response = await fetch(
-      `http://localhost:3000/api/time-series?symbol=${symbol}&interval=${interval}`
-    );
+    const url = `http://localhost:3000/api/time-series?symbol=${symbol}&interval=${interval}&start_date=${startDate}&end_date=${endDate}`;
+
+    const response = await fetch(url);
 
     const result = await response.json();
 
-    const volume = result.values.map((x) => {
+    const volume = result?.values?.map((x) => {
       const date = new Date(x.datetime);
 
       const utcDate = Date.UTC(
@@ -75,23 +77,34 @@ export const LineChart = ({ symbol, interval }) => {
       return [utcDate, parseFloat(x.volume)];
     });
 
-    setSeries({ volume });
+    setSeries({ volume: volume ?? [] });
   };
 
   useEffect(() => {
+    if (init === false) {
+      return;
+    }
+
     getTimeSeries();
-    console.log("change interval");
-    const timer = setInterval(() => {
-      console.log("get data");
+  }, [type, init]);
+
+  useEffect(() => {
+    let timer = null;
+
+    if (init === false || type !== "real_time" || interval === "") {
+      clearInterval(timer);
+      return;
+    }
+
+    timer = setInterval(() => {
       getTimeSeries();
     }, intervalTime[interval].ms);
 
     return () => clearInterval(timer);
-  }, [symbol, interval]);
+  }, [init, interval, type]);
 
   return (
     <>
-      <p>Gráfico</p>
       <HighchartsReact highcharts={Highcharts} options={options} />
     </>
   );

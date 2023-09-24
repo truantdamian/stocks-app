@@ -1,4 +1,4 @@
-import { LineChart } from "components/LineChart";
+import { GraphicDashboard } from "components/GraphicDashboard";
 
 export default async function Page({ searchParams }) {
   const { symbol, code } = searchParams;
@@ -11,33 +11,19 @@ export default async function Page({ searchParams }) {
 
   return (
     <>
-      <p>{data.name}</p>
-      <hr />
-      <div>
-        <input type="radio" value="real_time" name="timeType" checked />
-        Tiempo Real
-      </div>
-      <div>
-        <input type="radio" value="history" name="timeType" />
-        Histórico
-        <input type="date" name="date_start" />{" "}
-        <input type="date" name="date_finish" />
-      </div>
-      <div>
-        Intervalo
-        <select>
-          <option value="1min" selected>
-            1min
-          </option>
-          <option value="5min">5min</option>
-          <option value="15min">15min</option>
-        </select>
-      </div>
-      <div>
-        <button>Ver Gráfico</button>
-      </div>
-      <div>
-        <LineChart symbol="NFLX" interval={"1min"} />
+      <div className="flex flex-col gap-10 container m-auto">
+        <div className="grid w-full  grid-cols-1 gap-8 mx-auto">
+          <div className="p-6 rounded-lg bg-blue-50 ">
+            <div>
+              <h3 className="font-medium text-gray-700 ">{data.name}</h3>
+              <p className="mt-2 text-gray-500 ">
+                {data.symbol} {data.currency}
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <GraphicDashboard symbol={symbol} />
       </div>
     </>
   );
