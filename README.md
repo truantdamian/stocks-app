@@ -23,5 +23,5 @@ docker-compose up --build
 ## HOW TO UP DOWN
 
 ```
-docker-compose up --build
+docker-compose down
 ```
